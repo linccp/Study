@@ -22,6 +22,8 @@ import java.util.UUID;
 @Controller
 public class AuthorizeController {
 
+
+
     @Autowired
     private GitHubProvider gitHubProvider;
 
@@ -51,11 +53,16 @@ public class AuthorizeController {
         if(githubUser != null){
             User user = new User();
             user.setToken(UUID.randomUUID().toString());
+            System.out.println(user.getToken());
             user.setName(githubUser.getName());
+            System.out.println(user.getName());
 //            user.setAccountId(githubUser.getId().toString());
             user.setAccountId(String.valueOf(githubUser.getId()));
+            System.out.println(user.getAccountId());
             user.setGmtCreate(System.currentTimeMillis());
+            System.out.println(user.getGmtCreate());
             user.setGmtModified(user.getGmtCreate());
+            System.out.println(user.getGmtModified());
             userMapper.insert(user);
             request.getSession().setAttribute("user",githubUser);
             return "redirect:/";
