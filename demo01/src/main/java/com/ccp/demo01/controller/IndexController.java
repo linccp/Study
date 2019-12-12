@@ -20,8 +20,15 @@ public class IndexController {
     @Autowired
     private UserMapper userMapper;
 
+    @RequestMapping("/index")
+    public String index(){
+        return "index";
+    }
+
+
     @RequestMapping("/")
-    public String index(HttpServletRequest request){
+    public String main(HttpServletRequest request){
+
 //        查看网页时，找到所有的cookies
         Cookie[] cookies = request.getCookies();
 //        循环遍历cookies找到token
