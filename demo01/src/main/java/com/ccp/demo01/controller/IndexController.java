@@ -1,13 +1,19 @@
 package com.ccp.demo01.controller;
 
+import com.ccp.demo01.Dto.QuestionDto;
+import com.ccp.demo01.mapper.QuestionMapper;
 import com.ccp.demo01.mapper.UserMapper;
+import com.ccp.demo01.model.Question;
 import com.ccp.demo01.model.User;
+import com.ccp.demo01.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * {崔纯鹏}
@@ -20,18 +26,19 @@ public class IndexController {
     @Autowired
     private UserMapper userMapper;
 
-    @RequestMapping("/index")
-    public String index(){
-        return "index";
-    }
+    @Autowired
+    private QuestionService questionService;
 
 
     @RequestMapping("/")
-    public String main(HttpServletRequest request){
+    public String index(HttpServletRequest request,
+                        Model model){
+
 
 //        查看网页时，找到所有的cookies
         Cookie[] cookies = request.getCookies();
 //        循环遍历cookies找到token
+        if(cookies != null && cookies.length !=0)
         for (Cookie cookie : cookies) {
             if(cookie.getName().equals("token")){
                 String token = cookie.getValue();
@@ -44,6 +51,9 @@ public class IndexController {
                 break;
             }
         }
+
+        List<QuestionDto> questionList = questionService.list();
+        model.addAttribute("questions",questionList);
         return "index";
     }
 }
