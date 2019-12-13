@@ -1,5 +1,6 @@
 package com.ccp.demo01.controller;
 
+import com.ccp.demo01.Dto.PaginationDto;
 import com.ccp.demo01.Dto.QuestionDto;
 import com.ccp.demo01.mapper.QuestionMapper;
 import com.ccp.demo01.mapper.UserMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +34,11 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(HttpServletRequest request,
-                        Model model){
+                        Model model,
+                        @RequestParam(name = "page",defaultValue = "1") Integer page,
+                        @RequestParam(name = "size",defaultValue = "3") Integer size){
 
-
+        System.out.println(page + "\t" + size);
 //        查看网页时，找到所有的cookies
         Cookie[] cookies = request.getCookies();
 //        循环遍历cookies找到token
@@ -52,8 +56,8 @@ public class IndexController {
             }
         }
 
-        List<QuestionDto> questionList = questionService.list();
-        model.addAttribute("questions",questionList);
+        PaginationDto paginationDto = questionService.list(page,size);
+        model.addAttribute("pagination",paginationDto);
         return "index";
     }
 }

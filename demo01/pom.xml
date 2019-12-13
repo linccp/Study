@@ -78,6 +78,12 @@
             <version>1.18.10</version>
             <scope>provided</scope>
         </dependency>
+<!--        引入devtools，实现springboot自动部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
