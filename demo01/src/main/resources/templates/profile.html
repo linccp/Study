@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${sectionName}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/myself.css"/>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="navigation::copy"></div>
+<div class="container-fluid main" >
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span th:text="${sectionName}"></span></h2>
+            <hr/>
+<!--                        问题列表循环-->
+            <div class="media" th:each="profile:${profile.profiles}">
+                <div class="media-left media-middle">
+                    <a href="#">
+                        <img class="media-object img-rounded"
+                             th:src="${profile.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${profile.title}"></h4>
+                    <span th:text="${profile.description}"></span> <br />
+                    <span class="text-desc">
+<!--                        <span th:text="${question.commentCount}+'个 回复'"></span>-->
+<!--                        <span>//</span>-->
+<!--                        <span th:text="${question.likeCount}+'个 特别关注'"></span>-->
+<!--                        <span>//</span>-->
+<!--                        <span th:text="${question.viewCount}+'个 浏览'"></span>-->
+<!--                        <span>//</span>-->
+                        <span th:text="' 发布时间：'+${#dates.format(profile.gmtCreate,'yyyy-MM-dd HH：mm：ss')}"></span>
+
+                    </span>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-3 col-lg-12 col-sm-12 col-xs-12" style="background-color: #d9ffea">
+            <div class="list-group">
+                <a href="/profile/questions" th:class="${section == 'question'}?'list-group-item active':'list-group-item'">
+                    我的问题
+                    <span class="badge">14</span>
+                </a>
+                <a href="/profile/replies" th:class="${section == 'replies'}?'list-group-item active':'list-group-item'">
+                    最新回复
+                    <span class="badge">3</span>
+                </a>
+                <a href="#" class="list-group-item">Morbi leo risus</a>
+                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                <a href="#" class="list-group-item">Vestibulum at eros</a>
+            </div>
+
+        </div>
+    </div>
+    <nav aria-label="Page navigation page-index">
+        <ul class="pagination">
+            <li th:if="${profile.showFirst}">
+                <a href="@{'/profile/'+${section}(page=1)}" aria-label="showFirst">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li th:if="${profile.showPrevious}">
+                <a th:href="@{'/profile/'+${section}(page=${profile.page -1})}" aria-label="showPrevious">
+                    <span aria-hidden="true">&lt;</span>
+                </a>
+            </li>
+            <li th:class="${profile.page == page}? 'active':''" th:each="page:${profile.pages}">
+                <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}" ></a>
+            </li>
+            <li th:if="${profile.showNext}">
+                <a th:href="@{'/profile/'+${section}(page=${profile.page + 1})}" aria-label="Next">
+                    <span aria-hidden="true">&gt;</span>
+                </a>
+            </li>
+            <li th:if="${profile.showLast}">
+                <a th:href="@{'/profile/'+${section}(page=${profile.profilepage})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>
