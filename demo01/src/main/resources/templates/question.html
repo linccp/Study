@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${question.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/myself.css"/>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="navigation::copy"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span th:text="${question.title}"></span></h3>
+<!--            <hr/>-->
+            <span class="text-desc">
+                作者：<span th:text="${question.user.name}"></span>
+                <span>|</span>
+                发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH：mm：ss')}"></span>
+                <span>|</span>
+                关注人数：<span th:text="${question.likeCount}+'人'"></span>
+                <span>|</span>
+                阅读人数：<span th:text="${question.viewCount}+'人'"></span>
+                <span>|</span>
+                回复人数：<span th:text="${question.commentCount}+'人'"></span>
+            </span>
+            <div class="form-group">
+                <hr/>
+                <div>问题详细内容：</div>
+                <div name="description" id="description" th:text="${question.getDescription()}" class="form-control" cols="30" rows="10"
+                    style="background-color: #f7ffee"></div>
+                <hr/>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: #eccfff">
+                <hr/>
+                <h6>
+                    <span class="glyphicon glyphicon-comment" aria-hidden="true">添加评论</span>
+                    <span>|</span>
+                    <span class="glyphicon glyphicon-envelope" aria-hidden="true">
+                        邀请
+                        <span class="badge">14</span>
+                    </span>
+                    <span>|</span>
+                    <a th:href="@{'/publish/'+${question.user.id}}" class="my-menu">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        编辑
+                    </a>
+                    <span>|</span>
+                    <span class="glyphicon glyphicon-link" aria-hidden="true">相关链接</span>
+                </h6>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="background-color: #d9ffea">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>发起人:</h4>
+                <hr />
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <a href="#">
+                            <img class="media-object img-circle"
+                                 th:src="${question.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h6 class="media-heading" >
+                            <div th:text="${question.user.name}" ></div>
+                            <span class="text-desc">
+                                <span th:text="${question.commentCount}+'个 回复'"></span>
+                                <span>|</span>
+                                <span th:text="${question.likeCount}+'个 特别关注'"></span>
+                                <span>|</span>
+                                <span th:text="${question.viewCount}+'个 浏览'"></span>
+                                <div th:text="' 发布时间：'+${#dates.format(question.gmtCreate,'yyyy-MM-dd HH：mm：ss')}"></div>
+                            </span>
+                        </h6>
+                    </div>
+                </div>
+                <hr />
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>相关问题</h4>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
