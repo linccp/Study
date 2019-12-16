@@ -5,9 +5,11 @@ import com.ccp.demo01.Dto.GitHubUser;
 import com.ccp.demo01.mapper.UserMapper;
 import com.ccp.demo01.model.User;
 import com.ccp.demo01.provider.GitHubProvider;
+import com.ccp.demo01.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,6 +33,9 @@ public class AuthorizeController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Value("${github.client.id}")
     private String clientId;
@@ -59,10 +64,10 @@ public class AuthorizeController {
             user.setToken(token);                       //下面吧user信息写到数据库
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
+
             user.setAvatarUrl(githubUser.getAvatar_url());
-            userMapper.insert(user);                    //数据库插入
+            userService.createOrUpdate(user);
+//            userMapper.insert(user);                    //数据库插入
 //            写入cookie
             response.addCookie(new Cookie("token",token));      //token放入cookie
 //      如果登录成功（user不为空），那么开始写cookie      request.getSession().setAttribute("user",githubUser);
@@ -71,5 +76,15 @@ public class AuthorizeController {
             return "redirect:/";
         }
 
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

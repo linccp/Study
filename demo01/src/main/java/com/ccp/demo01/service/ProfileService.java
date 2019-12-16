@@ -31,16 +31,24 @@ public class ProfileService {
 
     public ProfileDto list(Integer userId, Integer page, Integer size) {
         ProfileDto profileDto = new ProfileDto();
+        Integer profilepage;
         Integer profilecount = questionMapper.countByUserId(userId);
-        profileDto.setProfile(profilecount,page,size);
+        if(profilecount == 0) {
+            profilepage = 1;
+        }else if(profilecount % size == 0){
+            profilepage = profilecount/size;
+        }else{
+            profilepage = profilecount/size/size + 1;
+        }
+
 
         //        判断分页超限
         if(page <1){
             page = 1;
-        }else if(page > profileDto.getProfilepage()){
-            page = profileDto.getProfilepage();
+        }else if(page > profilepage){
+            page = profilepage;
         }
-
+        profileDto.setProfile(profilecount,page,size);
 //        分页计算
         Integer offset = size * (page - 1);
         List<Question> questions = questionMapper.listByUserId(userId,offset,size);

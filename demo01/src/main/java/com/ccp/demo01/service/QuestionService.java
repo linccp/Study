@@ -29,15 +29,24 @@ public class QuestionService {
 
     public PaginationDto list(Integer page, Integer size) {
         PaginationDto paginationDto = new PaginationDto();
+        Integer totalpage;
         Integer totalcount = questionMapper.count();
-        paginationDto.setPagination(totalcount,page,size);
+        if(totalcount == 0) {
+            totalpage = 1;
+        }else if(totalcount % size == 0){
+                totalpage = totalcount/size;
+        }else{
+                totalpage = totalcount/size + 1;
+        }
+
+
         //        判断分页超限
         if(page <1){
             page = 1;
-        }else if(page > paginationDto.getTotalpage()){
-            page = paginationDto.getTotalpage();
+        }else if(page > totalpage){
+            page = totalpage;
         }
-
+        paginationDto.setPagination(totalcount,page,size);
 //        分页计算
         Integer offset = size * (page - 1);
         System.out.println(offset + "\t" + size);
@@ -67,5 +76,18 @@ public class QuestionService {
         User user = userMapper.findById(question.getCreator());
         questionDto.setUser(user);
         return questionDto;
+    }
+
+    public void creatOrUpdate(Question question) {
+        if(question.getId() == null){
+            //创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+        }else{
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        }
+
     }
 }
